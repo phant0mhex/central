@@ -1,9 +1,24 @@
-<!DOCTYPE html>
-<html lang="fr" class="h-full bg-gray-100">
 <head>
   <meta charset="UTF-8">
-  <title>Bus - Portail BACO</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Portail BACO - BUS</title> <script src="https://cdn.tailwindcss.com"></script>
+  
+  <link href="https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-sans/variable/geist-sans.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-mono/variable/geist-mono.css" rel="stylesheet">
+
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Geist Sans', 'sans-serif'], // Définit Geist Sans comme police par défaut
+            mono: ['Geist Mono', 'monospace'],
+          },
+        },
+      },
+    }
+  </script>
 </head>
 <body class="h-full">
 

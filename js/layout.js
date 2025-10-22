@@ -13,8 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // 3. Injecter le HTML de la nav
         navPlaceholder.innerHTML = html;
         
-        // 4. (Optionnel mais recommandé) Mettre en surbrillance le lien de la page active
+        // 4. Mettre en surbrillance le lien de la page active
         highlightActiveLink();
+        
+        // 5. NOUVELLE LIGNE : Activer les icônes Lucide injectées
+        lucide.createIcons();
       })
       .catch(error => {
         console.error('Impossible de charger la navigation:', error);
@@ -24,17 +27,14 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function highlightActiveLink() {
-  // Récupérer le nom du fichier de la page actuelle (ex: "taxi.html")
   const currentPage = window.location.pathname.split('/').pop();
   
   if (currentPage) {
-    // Trouver le lien dans la nav qui correspond à cette page
     const navLinksContainer = document.getElementById('nav-links');
     if (navLinksContainer) {
       const activeLink = navLinksContainer.querySelector(`a[href="${currentPage}"]`);
       
       if (activeLink) {
-        // Appliquer les classes Tailwind pour "actif"
         activeLink.classList.add('bg-gray-700', 'font-bold');
       }
     }
