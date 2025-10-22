@@ -1,0 +1,27 @@
+[
+  {
+    "nom": "Taxi Top",
+    "lieux": ["Liège", "Namur"],
+    "contacts": ["04/222.33.44", "081/55.66.77"]
+  },
+  {
+    "nom": "Taxi Vert",
+    "lieux": ["Mons", "Enghien"],
+    "contacts": ["065/88.99.00"]
+  },
+  {
+    "nom": "Sympa Tax",
+    "lieux": ["Liège", "Mons"],
+    "contacts": ["04/123.45.67"]
+  },
+  {
+    "nom": "Rapid Tax",
+    "lieux": ["Namur", "Enghien"],
+    "contacts": ["081/11.22.33", "02/44.55.66"]
+  },
+  {
+    "nom": "Taxis Willy",
+    "lieux": ["Mons"],
+    "contacts": ["081/11.22.33", "02/44.55.66"]
+  }
+]

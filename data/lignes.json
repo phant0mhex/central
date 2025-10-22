@@ -1,0 +1,29 @@
+{
+  "ligneData": {
+    "L.90": ["Halle", "Enghien", "Silly", "Ath", "Leuze", "Tournai", "Froyennes"],
+    "L.90C": ["Enghien", "Lessines", "Grammont"],
+    "L.75": ["Mons", "Jurbise", "Soignies"],
+    "L.124": ["Charleroi", "Nivelles", "Braine-l'Alleud"]
+  },
+  "pnData": {
+    "L.90": ["PN 108", "BK 67.508", "6032 Mont-sur-Marchienne", "Rue de Zone"],
+    "L.90C": ["PN 203", "BK 45.123", "Rue des Champs"],
+    "L.75": ["PN 310", "BK 12.345", "Avenue Centrale"],
+    "L.124": ["PN 411", "BK 78.901", "Zone Industrielle"]
+  },
+  "spiData": {
+    "L.90": [
+      { "lieu": "Carnières", "zone": "FCR", "adresse": "Rue de la Station, 7141 Morlanwelz" },
+      { "lieu": "Silly", "zone": "FTY", "adresse": "Rue du Moulin, 7830 Silly" }
+    ],
+    "L.90C": [
+      { "lieu": "Lessines", "zone": "FMS", "adresse": "Rue de l'Hôpital, 7860 Lessines" }
+    ],
+    "L.75": [
+      { "lieu": "Jurbise", "zone": "FCR", "adresse": "Place Communale, 7050 Jurbise" }
+    ],
+    "L.124": [
+      { "lieu": "Charleroi", "zone": "FTY", "adresse": "Boulevard Tirou, 6000 Charleroi" }
+    ]
+  }
+}

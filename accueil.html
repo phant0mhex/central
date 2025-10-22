@@ -1,21 +1,56 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="h-full bg-gray-100">
 <head>
   <meta charset="UTF-8">
-  <title>Accueil</title>
-  <style>
-    body { font-family: Arial; text-align: center; margin-top: 100px; }
-    button { padding: 20px; margin: 20px; font-size: 20px; cursor: pointer; }
-  </style>
+  <title>Accueil - Portail BACO</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <h1>Bienvenue sur le portail de données</h1>
-  <p>Choisissez votre domaine :</p>
-  <button onclick="location.href='operationnel.html'">Opérationnel</button>
-  <button onclick="location.href='pmr.html'">PMR</button>
-<button onclick="location.href='bus.html'">Bus</button>
-<button onclick="location.href='taxi.html'">Taxi</button>
-<button onclick="location.href='repertoire.html'">repertoire</button>
-<button onclick="location.href='lignes.html'">Lignes</button>
+<body class="h-full">
+
+  <div id="nav-placeholder"></div>
+
+  <div class="container mx-auto p-8">
+    <header class="mb-10 text-center">
+      <h1 class="text-4xl font-bold text-gray-800 mb-2">Bienvenue sur le portail de données</h1>
+      <p class="text-lg text-gray-600">Choisissez votre domaine :</p>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <a href="operationnel.html" class="block h-full p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:border-blue-500 hover:shadow-md transition-all">
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">Opérationnel</h3>
+        <p class="text-sm text-gray-600">Informations sur les sites et numéros d'urgence.</p>
+      </a>
+
+      <a href="pmr.html" class="block h-full p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:border-blue-500 hover:shadow-md transition-all">
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">PMR</h3>
+        <p class="text-sm text-gray-600">Données relatives aux Personnes à Mobilité Réduite.</p>
+      </a>
+      
+      <a href="bus.html" class="block h-full p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:border-blue-500 hover:shadow-md transition-all">
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">Bus</h3>
+        <p class="text-sm text-gray-600">Filtrage des chauffeurs par société et par ligne.</p>
+      </a>
+
+      <a href="taxi.html" class="block h-full p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:border-blue-500 hover:shadow-md transition-all">
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">Taxi</h3>
+        <p class="text-sm text-gray-600">Filtrage des sociétés de taxi par lieu d'intervention.</p>
+      </a>
+
+      <a href="repertoire.html" class="block h-full p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:border-blue-500 hover:shadow-md transition-all">
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">Répertoire</h3>
+        <p class="text-sm text-gray-600">Répertoire téléphonique interne (MIA, RCC, OCC).</p>
+      </a>
+
+      <a href="lignes.html" class="block h-full p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:border-blue-500 hover:shadow-md transition-all">
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">Lignes</h3>
+        <p class="text-sm text-gray-600">Détails des lignes, adresses PN et zones SPI.</p>
+      </a>
+
+    </div>
+  </div>
+
+  <script src="js/layout.js" defer></script>
+
 </body>
 </html>

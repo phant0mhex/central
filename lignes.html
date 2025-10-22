@@ -1,91 +1,115 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="h-full bg-gray-100">
 <head>
   <meta charset="UTF-8">
-  <title>Page Ligne</title>
-  <style>
-    body { font-family: Arial; margin: 20px; }
-    h2 { margin-top: 30px; }
-    .checkboxes { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; }
-    .checkboxes label { background: #eee; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
-    .checkboxes input { margin-right: 5px; }
-    .table-row { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 10px; }
-    .table-cell { background: #f9f9f9; padding: 8px 12px; border-radius: 5px; border: 1px solid #ccc; }
-  </style>
+  <title>Lignes - Portail BACO</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <h1>Répertoire des lignes</h1>
+<body class="h-full">
 
-  <!-- Catégories principales -->
-  <div class="checkboxes" id="mainCategories">
-    <label><input type="checkbox" value="Lignes" onchange="updateSubCategories()">Lignes</label>
-    <label><input type="checkbox" value="Adresse PN" onchange="updateSubCategories()">Adresse PN</label>
-    <label><input type="checkbox" value="Zone SPI" onchange="updateSubCategories()">Zone SPI</label>
+  <div id="nav-placeholder"></div>
+
+  <div class="container mx-auto p-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Répertoire des lignes</h1>
+
+    <h3 class="text-xl font-semibold text-gray-800 mb-4">1. Catégories</h3>
+    <div class="flex flex-wrap gap-3 mb-8" id="mainCategories">
+      <label class="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-full cursor-pointer hover:bg-gray-100 transition-all shadow-sm">
+        <input type="checkbox" value="Lignes" onchange="updateSubCategories()" class="rounded text-blue-600 focus:ring-blue-500">
+        <span class="font-medium text-gray-700">Lignes</span>
+      </label>
+      <label class="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-full cursor-pointer hover:bg-gray-100 transition-all shadow-sm">
+        <input type="checkbox" value="Adresse PN" onchange="updateSubCategories()" class="rounded text-blue-600 focus:ring-blue-500">
+        <span class="font-medium text-gray-700">Adresse PN</span>
+      </label>
+      <label class="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-full cursor-pointer hover:bg-gray-100 transition-all shadow-sm">
+        <input type="checkbox" value="Zone SPI" onchange="updateSubCategories()" class="rounded text-blue-600 focus:ring-blue-500">
+        <span class="font-medium text-gray-700">Zone SPI</span>
+      </label>
+    </div>
+
+    <div id="lineSelectorContainer" style="display:none;">
+      <h3 class="text-xl font-semibold text-gray-800 mb-4">2. Lignes</h3>
+      <div class="flex flex-wrap gap-3 mb-8" id="lineSelector">
+        <label class="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-full cursor-pointer hover:bg-gray-100 transition-all shadow-sm">
+          <input type="checkbox" value="L.90" onchange="updateDisplay()" class="rounded text-blue-600 focus:ring-blue-500">
+          <span class="font-medium text-gray-700">L.90</span>
+        </label>
+        <label class="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-full cursor-pointer hover:bg-gray-100 transition-all shadow-sm">
+          <input type="checkbox" value="L.90C" onchange="updateDisplay()" class="rounded text-blue-600 focus:ring-blue-500">
+          <span class="font-medium text-gray-700">L.90C</span>
+        </label>
+        <label class="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-full cursor-pointer hover:bg-gray-100 transition-all shadow-sm">
+          <input type="checkbox" value="L.75" onchange="updateDisplay()" class="rounded text-blue-600 focus:ring-blue-500">
+          <span class="font-medium text-gray-700">L.75</span>
+        </label>
+        <label class="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-full cursor-pointer hover:bg-gray-100 transition-all shadow-sm">
+          <input type="checkbox" value="L.124" onchange="updateDisplay()" class="rounded text-blue-600 focus:ring-blue-500">
+          <span class="font-medium text-gray-700">L.124</span>
+        </label>
+      </div>
+    </div>
+
+    <div id="zoneFilterContainer" style="display:none;">
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">3. Filtres SPI</h3>
+        <div class="flex flex-wrap gap-3 mb-8" id="zoneFilter">
+          <label class="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-full cursor-pointer hover:bg-gray-100 transition-all shadow-sm">
+            <input type="checkbox" value="FTY" class="spi-filter" onchange="updateDisplay()" class="rounded text-blue-600 focus:ring-blue-500">
+            <span class="font-medium text-gray-700">FTY</span>
+          </label>
+          <label class="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-full cursor-pointer hover:bg-gray-100 transition-all shadow-sm">
+            <input type="checkbox" value="FMS" class="spi-filter" onchange="updateDisplay()" class="rounded text-blue-600 focus:ring-blue-500">
+            <span class="font-medium text-gray-700">FMS</span>
+          </label>
+          <label class="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-full cursor-pointer hover:bg-gray-100 transition-all shadow-sm">
+            <input type="checkbox" value="FCR" class="spi-filter" onchange="updateDisplay()" class="rounded text-blue-600 focus:ring-blue-500">
+            <span class="font-medium text-gray-700">FCR</span>
+          </label>
+      </div>
+    </div>
+    
+    <hr class="my-8">
+    <div id="resultDisplay">
+      <p class="text-gray-600">Veuillez sélectionner une catégorie et une ligne pour afficher les résultats.</p>
+    </div>
   </div>
 
-  <!-- Sélection des lignes -->
-  <div class="checkboxes" id="lineSelector" style="display:none;">
-    <label><input type="checkbox" value="L.90" onchange="updateDisplay()"> L.90</label>
-    <label><input type="checkbox" value="L.90C" onchange="updateDisplay()"> L.90C</label>
-    <label><input type="checkbox" value="L.75" onchange="updateDisplay()"> L.75</label>
-    <label><input type="checkbox" value="L.124" onchange="updateDisplay()"> L.124</label>
-  </div>
 
-  <!-- Filtres SPI -->
-  <div class="checkboxes" id="zoneFilter" style="display:none;">
-    <label><input type="checkbox" value="FTY" class="spi-filter" onchange="updateDisplay()"> FTY</label>
-    <label><input type="checkbox" value="FMS" class="spi-filter" onchange="updateDisplay()"> FMS</label>
-    <label><input type="checkbox" value="FCR" class="spi-filter" onchange="updateDisplay()"> FCR</label>
-  </div>
-
-  <!-- Résultat -->
-  <div id="resultDisplay"></div>
-
+  <script src="js/layout.js" defer></script>
   <script>
-    const ligneData = {
-      "L.90": ["Halle", "Enghien", "Silly", "Ath", "Leuze", "Tournai", "Froyennes"],
-      "L.90C": ["Enghien", "Lessines", "Grammont"],
-      "L.75": ["Mons", "Jurbise", "Soignies"],
-      "L.124": ["Charleroi", "Nivelles", "Braine-l'Alleud"]
-    };
+    // Variables pour stocker les données du JSON
+    let ligneData = {};
+    let pnData = {};
+    let spiData = {};
 
-    const pnData = {
-      "L.90": ["PN 108", "BK 67.508", "6032 Mont-sur-Marchienne", "Rue de Zone"],
-      "L.90C": ["PN 203", "BK 45.123", "Rue des Champs"],
-      "L.75": ["PN 310", "BK 12.345", "Avenue Centrale"],
-      "L.124": ["PN 411", "BK 78.901", "Zone Industrielle"]
-    };
+    // Charger les données
+    document.addEventListener('DOMContentLoaded', () => {
+      fetch('data/lignes.json')
+        .then(response => {
+          if (!response.ok) throw new Error('Erreur réseau');
+          return response.json();
+        })
+        .then(data => {
+          ligneData = data.ligneData;
+          pnData = data.pnData;
+          spiData = data.spiData;
+        })
+        .catch(error => {
+          console.error('Erreur de chargement des données lignes:', error);
+          document.getElementById('resultDisplay').innerHTML = "<p class='text-red-600'>Erreur: Impossible de charger les données des lignes.</p>";
+        });
+    });
 
-    const spiData = {
-      "L.90": [
-        { lieu: "Carnières", zone: "FCR", adresse: "Rue de la Station, 7141 Morlanwelz" },
-        { lieu: "Silly", zone: "FTY", adresse: "Rue du Moulin, 7830 Silly" }
-      ],
-      "L.90C": [
-        { lieu: "Lessines", zone: "FMS", adresse: "Rue de l'Hôpital, 7860 Lessines" }
-      ],
-      "L.75": [
-        { lieu: "Jurbise", zone: "FCR", adresse: "Place Communale, 7050 Jurbise" }
-      ],
-      "L.124": [
-        { lieu: "Charleroi", zone: "FTY", adresse: "Boulevard Tirou, 6000 Charleroi" }
-      ]
-    };
+    // --- Fonctions logiques (identiques à l'original, sauf pour le HTML généré) ---
 
     function updateSubCategories() {
       const selected = Array.from(document.querySelectorAll('#mainCategories input:checked')).map(cb => cb.value);
-      const lineBox = document.getElementById('lineSelector');
-      const zoneBox = document.getElementById('zoneFilter');
-
+      const lineBox = document.getElementById('lineSelectorContainer');
+      
       // Affiche les lignes si au moins une catégorie est cochée
-      lineBox.style.display = selected.length > 0 ? 'flex' : 'none';
-
-      // Affiche les filtres SPI uniquement si Zone SPI est cochée et au moins une ligne sélectionnée
-      const zoneSelected = selected.includes("Zone SPI");
-      const linesSelected = document.querySelectorAll('#lineSelector input:checked').length > 0;
-      zoneBox.style.display = zoneSelected && linesSelected ? 'flex' : 'none';
-
-      updateDisplay();
+      lineBox.style.display = selected.length > 0 ? 'block' : 'none';
+      
+      updateDisplay(); // Mettre à jour l'affichage
     }
 
     function updateDisplay() {
@@ -93,24 +117,39 @@
       const selectedLines = Array.from(document.querySelectorAll('#lineSelector input:checked')).map(cb => cb.value);
       const selectedZones = Array.from(document.querySelectorAll('.spi-filter:checked')).map(cb => cb.value);
       const container = document.getElementById('resultDisplay');
-      const zoneBox = document.getElementById('zoneFilter');
+      const zoneBox = document.getElementById('zoneFilterContainer');
 
-      // Affiche ou masque les filtres SPI selon les conditions
+      // Affiche ou masque les filtres SPI
       const zoneSelected = selectedMain.includes("Zone SPI");
-      zoneBox.style.display = zoneSelected && selectedLines.length > 0 ? 'flex' : 'none';
+      zoneBox.style.display = zoneSelected && selectedLines.length > 0 ? 'block' : 'none';
 
-      container.innerHTML = '';
+      container.innerHTML = ''; // Vider les résultats
+
+      if (selectedLines.length === 0 && selectedMain.length > 0) {
+          container.innerHTML = '<p class="text-gray-600">Veuillez sélectionner au moins une ligne.</p>';
+          return;
+      }
+      if (selectedLines.length === 0 && selectedMain.length === 0) {
+          container.innerHTML = '<p class="text-gray-600">Veuillez sélectionner une catégorie et une ligne pour afficher les résultats.</p>';
+          return;
+      }
 
       selectedLines.forEach(line => {
+        let lineContent = '';
+
         if (selectedMain.includes("Lignes") && ligneData[line]) {
-          container.innerHTML += `<h2>${line} – Lignes</h2><div class="table-row">` +
-            ligneData[line].map(e => `<div class="table-cell">${e}</div>`).join('') +
+          lineContent += `<h3 class="text-xl font-semibold text-gray-700 mt-4 mb-3">Gares</h3><div class="flex flex-wrap gap-3">` +
+            ligneData[line].map(e => 
+              `<div class="bg-white p-3 rounded-lg border shadow-sm text-gray-800 font-medium">${e}</div>`
+            ).join('') +
             `</div>`;
         }
 
         if (selectedMain.includes("Adresse PN") && pnData[line]) {
-          container.innerHTML += `<h2>${line} – Adresse PN</h2><div class="table-row">` +
-            pnData[line].map(e => `<div class="table-cell">${e}</div>`).join('') +
+          lineContent += `<h3 class="text-xl font-semibold text-gray-700 mt-4 mb-3">Adresse PN</h3><div class="flex flex-wrap gap-3">` +
+            pnData[line].map(e => 
+              `<div class="bg-white p-3 rounded-lg border shadow-sm text-gray-800">${e}</div>`
+            ).join('') +
             `</div>`;
         }
 
@@ -120,13 +159,28 @@
             : spiData[line];
 
           if (filtered.length > 0) {
-            container.innerHTML += `<h2>${line} – Zone SPI</h2><div class="table-row">` +
-              filtered.map(e => `<div class="table-cell">${e.lieu} – ${e.zone} – ${e.adresse}</div>`).join('') +
+            lineContent += `<h3 class="text-xl font-semibold text-gray-700 mt-4 mb-3">Zone SPI</h3><div class="flex flex-wrap gap-3">` +
+              filtered.map(e => 
+                `<div class="bg-white p-4 rounded-lg border shadow-sm min-w-[250px]">
+                   <strong class="text-gray-900">${e.lieu} <span class="text-sm font-normal text-blue-600">(${e.zone})</span></strong>
+                   <span class="block text-sm text-gray-600 mt-1">${e.adresse}</span>
+                 </div>`
+              ).join('') +
               `</div>`;
           }
         }
+        
+        // Ajouter un titre de section pour la ligne
+        if (lineContent) {
+            container.innerHTML += `<div class="mb-8"><h2 class="text-3xl font-bold text-gray-900 border-b pb-2 mb-4">${line}</h2>${lineContent}</div>`;
+        }
       });
+      
+      if (container.innerHTML === '') {
+          container.innerHTML = '<p class="text-gray-600">Aucun résultat pour les filtres sélectionnés.</p>';
+      }
     }
   </script>
+
 </body>
 </html>
