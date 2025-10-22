@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Filtrage lieux → taxis</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1 { margin-bottom: 10px; }
+    .checkboxes { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+    .checkboxes label { background: #eee; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+    .checkboxes input { margin-right: 5px; }
+    .content ul { list-style: none; padding: 0; }
+    .content li { margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <h1>Sociétés de taxi par lieu</h1>
+
+  <div class="checkboxes" id="lieuCheckboxes">
+    <label><input type="checkbox" value="Liège" onchange="updateTaxiDisplay()">Liège</label>
+    <label><input type="checkbox" value="Mons" onchange="updateTaxiDisplay()">Mons</label>
+    <label><input type="checkbox" value="Namur" onchange="updateTaxiDisplay()">Namur</label>
+    <label><input type="checkbox" value="Enghien" onchange="updateTaxiDisplay()">Enghien</label>
+    <!-- Ajoute ici les autres lieux -->
+  </div>
+
+  <div class="content" id="content"></div>
+
+  <script>
+    const taxis = [
+      {
+        nom: 'Taxi Top',
+        lieux: ['Liège', 'Namur'],
+        contacts: ['04/222.33.44', '081/55.66.77']
+      },
+      {
+        nom: 'Taxi Vert',
+        lieux: ['Mons', 'Enghien'],
+        contacts: ['065/88.99.00']
+      },
+      {
+        nom: 'Sympa Tax',
+        lieux: ['Liège', 'Mons'],
+        contacts: ['04/123.45.67']
+      },
+      {
+        nom: 'Rapid Tax',
+        lieux: ['Namur', 'Enghien'],
+        contacts: ['081/11.22.33', '02/44.55.66']
+      }
+    ];
+
+    function updateTaxiDisplay() {
+      const lieuxSelectionnes = Array.from(document.querySelectorAll('#lieuCheckboxes input:checked'))
+        .map(cb => cb.value);
+
+      const taxisAffiches = taxis.filter(taxi =>
+        taxi.lieux.some(lieu => lieuxSelectionnes.includes(lieu))
+      );
+
+      const container = document.getElementById('content');
+      if (taxisAffiches.length === 0) {
+        container.innerHTML = '<p>Aucune société trouvée pour les lieux sélectionnés.</p>';
+        return;
+      }
+
+      container.innerHTML = '<h3>Sociétés disponibles :</h3><div class="checkboxes" id="taxiCheckboxes">' +
+        taxisAffiches.map(t =>
+          `<label><input type="checkbox" value="${t.nom}" onchange="updateContactsDisplay()"> ${t.nom}</label>`
+        ).join('') +
+        '</div><div id="contacts"></div>';
+    }
+
+    function updateContactsDisplay() {
+      const taxisSelectionnes = Array.from(document.querySelectorAll('#taxiCheckboxes input:checked'))
+        .map(cb => cb.value);
+
+      const contacts = taxis
+        .filter(t => taxisSelectionnes.includes(t.nom))
+        .flatMap(t => t.contacts.map(num => `<li><a href="tel:${num}">${num}</a></li>`));
+
+      const container = document.getElementById('contacts');
+      if (contacts.length === 0) {
+        container.innerHTML = '';
+      } else {
+        container.innerHTML = '<h3>Numéros à contacter :</h3><ul>' + contacts.join('') + '</ul>';
+      }
+    }
+  </script>
+</body>
+</html>

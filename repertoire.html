@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Répertoire téléphonique</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    h2 { margin-top: 30px; }
+    .checkboxes { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; }
+    .checkboxes label { background: #eee; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+    .checkboxes input { margin-right: 5px; }
+    .columns { display: flex; gap: 40px; flex-wrap: wrap; }
+    .column { background: #f9f9f9; padding: 10px; border-radius: 5px; min-width: 200px; }
+    .column h3 { margin-top: 0; }
+    .column ul { list-style: none; padding: 0; }
+    .column li { margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <h1>Répertoire téléphonique</h1>
+
+  <div class="checkboxes" id="mainCategories">
+    <label><input type="checkbox" value="MIA" onchange="updateSubCategories()">MIA</label>
+    <label><input type="checkbox" value="RCC-OCC" onchange="updateSubCategories()">RCC - OCC</label>
+    <label><input type="checkbox" value="Autre" onchange="updateSubCategories()">Autre</label>
+  </div>
+
+  <div class="checkboxes" id="miaSubCategories" style="display:none;">
+    <label><input type="checkbox" value="FTY" onchange="updateDisplay()">FTY</label>
+    <label><input type="checkbox" value="FMS" onchange="updateDisplay()">FMS</label>
+    <label><input type="checkbox" value="FCR" onchange="updateDisplay()">FCR</label>
+  </div>
+
+  <div id="directoryDisplay"></div>
+
+  <script>
+    const miaData = {
+      FTY: {
+        SPI: [{ nom: 'Alice', tel: '0471/11.22.33' }],
+        OPI: [{ nom: 'Bruno', tel: '0472/44.55.66' }],
+        CPI: [{ nom: 'Claire', tel: '0473/77.88.99' }],
+        PA:  [{ nom: 'David', tel: '0474/00.11.22' }]
+      },
+      FMS: {
+        SPI: [{ nom: 'Emma', tel: '0475/33.44.55' }],
+        OPI: [{ nom: 'Franck', tel: '0476/66.77.88' }],
+        CPI: [{ nom: 'Gina', tel: '0477/99.00.11' }],
+        PA:  [{ nom: 'Hugo', tel: '0478/22.33.44' }]
+      },
+      FCR: {
+        SPI: [{ nom: 'Isabelle', tel: '0479/55.66.77' }],
+        OPI: [{ nom: 'Julien', tel: '0480/88.99.00' }],
+        CPI: [{ nom: 'Karim', tel: '0481/11.22.33' }],
+        PA:  [{ nom: 'Laura', tel: '0482/44.55.66' }]
+      }
+    };
+
+    const rccData = {
+      'OCC FMS': [{ nom: 'Marc', tel: '0483/77.88.99' }],
+      'OCC FNR': [{ nom: 'Nina', tel: '0484/00.11.22' }],
+      'RCC':     [{ nom: 'Olivier', tel: '0485/33.44.55' }]
+    };
+
+    function updateSubCategories() {
+      const miaChecked = document.querySelector('#mainCategories input[value="MIA"]').checked;
+      const rccChecked = document.querySelector('#mainCategories input[value="RCC-OCC"]').checked;
+
+      document.getElementById('miaSubCategories').style.display = miaChecked ? 'flex' : 'none';
+      updateDisplay();
+    }
+
+    function updateDisplay() {
+      const container = document.getElementById('directoryDisplay');
+      container.innerHTML = '';
+      const columns = [];
+
+      // MIA
+      const miaChecked = document.querySelector('#mainCategories input[value="MIA"]').checked;
+      if (miaChecked) {
+        const subChecked = Array.from(document.querySelectorAll('#miaSubCategories input:checked')).map(cb => cb.value);
+        subChecked.forEach(sub => {
+          const data = miaData[sub];
+          for (const col in data) {
+            if (!columns[col]) columns[col] = [];
+            columns[col].push(...data[col]);
+          }
+        });
+      }
+
+      // RCC-OCC
+      const rccChecked = document.querySelector('#mainCategories input[value="RCC-OCC"]').checked;
+      if (rccChecked) {
+        for (const col in rccData) {
+          columns[col] = rccData[col];
+        }
+      }
+
+      // Affichage
+      const output = document.createElement('div');
+      output.className = 'columns';
+      for (const col in columns) {
+        const block = document.createElement('div');
+        block.className = 'column';
+        block.innerHTML = `<h3>${col}</h3><ul>` +
+          columns[col].map(p => `<li><strong>${p.nom}</strong> : <a href="tel:${p.tel}">${p.tel}</a></li>`).join('') +
+          '</ul>';
+        output.appendChild(block);
+      }
+      container.appendChild(output);
+    }
+  </script>
+</body>
+</html>

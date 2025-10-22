@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Filtrage lignes → sociétés → chauffeurs</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1 { margin-bottom: 10px; }
+    .checkboxes { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+    .checkboxes label { background: #eee; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+    .checkboxes input { margin-right: 5px; }
+    .content ul { list-style: none; padding: 0; }
+    .content li { margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <h1>Filtrer les chauffeurs par ligne</h1>
+
+  <div class="checkboxes" id="ligneCheckboxes">
+    <!-- Cases à cocher pour les lignes -->
+    <label><input type="checkbox" value="L.94" onchange="updateSocieteDisplay()">L.94</label>
+    <label><input type="checkbox" value="L.124" onchange="updateSocieteDisplay()">L.124</label>
+    <label><input type="checkbox" value="L.75" onchange="updateSocieteDisplay()">L.75</label>
+    <label><input type="checkbox" value="L.96" onchange="updateSocieteDisplay()">L.96</label>
+    <label><input type="checkbox" value="L.90" onchange="updateSocieteDisplay()">L.90</label>
+    <!-- Ajoute ici les autres lignes jusqu'à 18 -->
+  </div>
+
+  <div class="content" id="content"></div>
+
+  <script>
+    const societes = [
+      {
+        nom: 'Kim',
+        lignes: ['L.94', 'L.124', 'L.75', 'L.96'],
+        chauffeurs: [
+          { nom: 'Alice', tel: '0471/11.22.33' },
+          { nom: 'Bruno', tel: '0472/44.55.66' }
+        ]
+      },
+      {
+        nom: 'Fermon',
+        lignes: ['L.94', 'L.75'],
+        chauffeurs: [
+          { nom: 'Claire', tel: '0473/77.88.99' }
+        ]
+      },
+      {
+        nom: 'Jumbo',
+        lignes: ['L.75', 'L.96'],
+        chauffeurs: [
+          { nom: 'David', tel: '0474/00.11.22' }
+        ]
+      },
+      {
+        nom: 'Degr',
+        lignes: ['L.90', 'L.124'],
+        chauffeurs: [
+          { nom: 'Emma', tel: '0475/33.44.55' }
+        ]
+      }
+    ];
+
+    function updateSocieteDisplay() {
+      const lignesSelectionnees = Array.from(document.querySelectorAll('#ligneCheckboxes input:checked'))
+        .map(cb => cb.value);
+
+      const societesAffichees = societes.filter(societe =>
+        societe.lignes.some(ligne => lignesSelectionnees.includes(ligne))
+      );
+
+      const container = document.getElementById('content');
+      if (societesAffichees.length === 0) {
+        container.innerHTML = '<p>Aucune société trouvée pour les lignes sélectionnées.</p>';
+        return;
+      }
+
+      container.innerHTML = '<h3>Sociétés concernées :</h3><div class="checkboxes" id="societeCheckboxes">' +
+        societesAffichees.map(s =>
+          `<label><input type="checkbox" value="${s.nom}" onchange="updateChauffeursDisplay()"> ${s.nom}</label>`
+        ).join('') +
+        '</div><div id="chauffeurs"></div>';
+    }
+
+    function updateChauffeursDisplay() {
+      const societesSelectionnees = Array.from(document.querySelectorAll('#societeCheckboxes input:checked'))
+        .map(cb => cb.value);
+
+      const chauffeurs = societes
+        .filter(s => societesSelectionnees.includes(s.nom))
+        .flatMap(s => s.chauffeurs.map(c => `<li><strong>${c.nom}</strong> : <a href="tel:${c.tel}">${c.tel}</a></li>`));
+
+      const container = document.getElementById('chauffeurs');
+      if (chauffeurs.length === 0) {
+        container.innerHTML = '';
+      } else {
+        container.innerHTML = '<h3>Chauffeurs à contacter :</h3><ul>' + chauffeurs.join('') + '</ul>';
+      }
+    }
+  </script>
+</body>
+</html>

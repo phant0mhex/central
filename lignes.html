@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Page Ligne</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    h2 { margin-top: 30px; }
+    .checkboxes { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; }
+    .checkboxes label { background: #eee; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+    .checkboxes input { margin-right: 5px; }
+    .table-row { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 10px; }
+    .table-cell { background: #f9f9f9; padding: 8px 12px; border-radius: 5px; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <h1>Répertoire des lignes</h1>
+
+  <!-- Catégories principales -->
+  <div class="checkboxes" id="mainCategories">
+    <label><input type="checkbox" value="Lignes" onchange="updateSubCategories()">Lignes</label>
+    <label><input type="checkbox" value="Adresse PN" onchange="updateSubCategories()">Adresse PN</label>
+    <label><input type="checkbox" value="Zone SPI" onchange="updateSubCategories()">Zone SPI</label>
+  </div>
+
+  <!-- Sélection des lignes -->
+  <div class="checkboxes" id="lineSelector" style="display:none;">
+    <label><input type="checkbox" value="L.90" onchange="updateDisplay()"> L.90</label>
+    <label><input type="checkbox" value="L.90C" onchange="updateDisplay()"> L.90C</label>
+    <label><input type="checkbox" value="L.75" onchange="updateDisplay()"> L.75</label>
+    <label><input type="checkbox" value="L.124" onchange="updateDisplay()"> L.124</label>
+  </div>
+
+  <!-- Filtres SPI -->
+  <div class="checkboxes" id="zoneFilter" style="display:none;">
+    <label><input type="checkbox" value="FTY" class="spi-filter" onchange="updateDisplay()"> FTY</label>
+    <label><input type="checkbox" value="FMS" class="spi-filter" onchange="updateDisplay()"> FMS</label>
+    <label><input type="checkbox" value="FCR" class="spi-filter" onchange="updateDisplay()"> FCR</label>
+  </div>
+
+  <!-- Résultat -->
+  <div id="resultDisplay"></div>
+
+  <script>
+    const ligneData = {
+      "L.90": ["Halle", "Enghien", "Silly", "Ath", "Leuze", "Tournai", "Froyennes"],
+      "L.90C": ["Enghien", "Lessines", "Grammont"],
+      "L.75": ["Mons", "Jurbise", "Soignies"],
+      "L.124": ["Charleroi", "Nivelles", "Braine-l'Alleud"]
+    };
+
+    const pnData = {
+      "L.90": ["PN 108", "BK 67.508", "6032 Mont-sur-Marchienne", "Rue de Zone"],
+      "L.90C": ["PN 203", "BK 45.123", "Rue des Champs"],
+      "L.75": ["PN 310", "BK 12.345", "Avenue Centrale"],
+      "L.124": ["PN 411", "BK 78.901", "Zone Industrielle"]
+    };
+
+    const spiData = {
+      "L.90": [
+        { lieu: "Carnières", zone: "FCR", adresse: "Rue de la Station, 7141 Morlanwelz" },
+        { lieu: "Silly", zone: "FTY", adresse: "Rue du Moulin, 7830 Silly" }
+      ],
+      "L.90C": [
+        { lieu: "Lessines", zone: "FMS", adresse: "Rue de l'Hôpital, 7860 Lessines" }
+      ],
+      "L.75": [
+        { lieu: "Jurbise", zone: "FCR", adresse: "Place Communale, 7050 Jurbise" }
+      ],
+      "L.124": [
+        { lieu: "Charleroi", zone: "FTY", adresse: "Boulevard Tirou, 6000 Charleroi" }
+      ]
+    };
+
+    function updateSubCategories() {
+      const selected = Array.from(document.querySelectorAll('#mainCategories input:checked')).map(cb => cb.value);
+      const lineBox = document.getElementById('lineSelector');
+      const zoneBox = document.getElementById('zoneFilter');
+
+      // Affiche les lignes si au moins une catégorie est cochée
+      lineBox.style.display = selected.length > 0 ? 'flex' : 'none';
+
+      // Affiche les filtres SPI uniquement si Zone SPI est cochée et au moins une ligne sélectionnée
+      const zoneSelected = selected.includes("Zone SPI");
+      const linesSelected = document.querySelectorAll('#lineSelector input:checked').length > 0;
+      zoneBox.style.display = zoneSelected && linesSelected ? 'flex' : 'none';
+
+      updateDisplay();
+    }
+
+    function updateDisplay() {
+      const selectedMain = Array.from(document.querySelectorAll('#mainCategories input:checked')).map(cb => cb.value);
+      const selectedLines = Array.from(document.querySelectorAll('#lineSelector input:checked')).map(cb => cb.value);
+      const selectedZones = Array.from(document.querySelectorAll('.spi-filter:checked')).map(cb => cb.value);
+      const container = document.getElementById('resultDisplay');
+      const zoneBox = document.getElementById('zoneFilter');
+
+      // Affiche ou masque les filtres SPI selon les conditions
+      const zoneSelected = selectedMain.includes("Zone SPI");
+      zoneBox.style.display = zoneSelected && selectedLines.length > 0 ? 'flex' : 'none';
+
+      container.innerHTML = '';
+
+      selectedLines.forEach(line => {
+        if (selectedMain.includes("Lignes") && ligneData[line]) {
+          container.innerHTML += `<h2>${line} – Lignes</h2><div class="table-row">` +
+            ligneData[line].map(e => `<div class="table-cell">${e}</div>`).join('') +
+            `</div>`;
+        }
+
+        if (selectedMain.includes("Adresse PN") && pnData[line]) {
+          container.innerHTML += `<h2>${line} – Adresse PN</h2><div class="table-row">` +
+            pnData[line].map(e => `<div class="table-cell">${e}</div>`).join('') +
+            `</div>`;
+        }
+
+        if (selectedMain.includes("Zone SPI") && spiData[line]) {
+          const filtered = selectedZones.length > 0
+            ? spiData[line].filter(e => selectedZones.includes(e.zone))
+            : spiData[line];
+
+          if (filtered.length > 0) {
+            container.innerHTML += `<h2>${line} – Zone SPI</h2><div class="table-row">` +
+              filtered.map(e => `<div class="table-cell">${e.lieu} – ${e.zone} – ${e.adresse}</div>`).join('') +
+              `</div>`;
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
